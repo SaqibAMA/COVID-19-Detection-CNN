@@ -17,7 +17,7 @@ from keras.losses import SparseCategoricalCrossentropy
 
 IMAGE_SIZE = (50, 50)
 
-dataset_path = 'dataset/Infection Segmentation Data/Infection Segmentation Data'
+dataset_path = 'src/dataset/Infection Segmentation Data/Infection Segmentation Data'
 image_data = {
     'covid': np.array([]),
     'normal': np.array([])
