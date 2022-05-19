@@ -97,7 +97,7 @@ model.load_weights('weight.h5')
 
 # Compiling the model
 
-model.compile(optimizer=Adam(lr=0.000001), loss=SparseCategoricalCrossentropy(from_logits=True), metrics=['accuracy'])
+model.compile(optimizer=Adam(lr=0.0001), loss=SparseCategoricalCrossentropy(from_logits=True), metrics=['accuracy'])
 history = model.fit(X, Y, epochs=25)
 
 # Saving the model weights and model attributes
