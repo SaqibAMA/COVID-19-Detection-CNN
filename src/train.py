@@ -76,8 +76,8 @@ X, Y = sklearn.utils.shuffle(X, Y)
 
 # Creating our neural network
 
-model = load_model('model.h5')
-model.load_weights('weight.h5')
+model = load_model('src/model.h5')
+model.load_weights('src/weight.h5')
 
 ## Uncomment the model if you don't have any previous training data
 
@@ -101,5 +101,5 @@ model.compile(optimizer=Adam(lr=0.0001), loss=SparseCategoricalCrossentropy(from
 history = model.fit(X, Y, epochs=25)
 
 # Saving the model weights and model attributes
-model.save_weights('weight.h5')
-model.save('model.h5')
+model.save_weights('src/weight.h5')
+model.save('src/model.h5')
