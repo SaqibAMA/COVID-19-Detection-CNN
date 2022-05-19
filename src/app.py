@@ -5,9 +5,10 @@ from tkinter import *
 from tkinter import filedialog
 import cv2
 import time
+from constants import MODEL_PATH, WEIGHT_PATH, IMAGE_SIZE
 
-model = load_model('src/model.h5')
-model.load_weights('src/weight.h5')
+model = load_model(MODEL_PATH)
+model.load_weights(WEIGHT_PATH)
 
 
 def upload_image(root):
@@ -15,8 +16,8 @@ def upload_image(root):
     root.filename = filedialog.askopenfilename(initialdir="/", title="Select a file", filetypes=(("png files", "*.png"), ("all files", "*.*")))
     if (root.filename == ""):
         return
-    img = cv2.resize(cv2.imread(root.filename), (50, 50))
-    img = img.reshape(1, 50, 50, 3)
+    img = cv2.resize(cv2.imread(root.filename), IMAGE_SIZE)
+    img = img.reshape(1, IMAGE_SIZE[0], IMAGE_SIZE[1], 3)
     img = img.astype('float32')
 
     # predict the image

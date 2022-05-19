@@ -3,35 +3,22 @@ Created by: Saqib Ali
 train.py -- allows the user to train the exising network to 25 epochs.
 """
 
+from lzma import MODE_FAST
 import numpy as np
-import os
-import cv2
 import sklearn.utils
 from keras.models import Sequential, load_model
 from keras.layers import Dense, Conv2D, MaxPool2D, Flatten, Dropout
 from keras.optimizers import Adam
 from keras.losses import SparseCategoricalCrossentropy
-
+from constants import MODEL_PATH, WEIGHT_PATH
+from utils import read_image_data
 
 # Reading training data from the dataset
 
-IMAGE_SIZE = (50, 50)
-
-dataset_path = 'src/dataset/Infection Segmentation Data/Infection Segmentation Data'
 image_data = {
     'covid': np.array([]),
     'normal': np.array([])
 }
-
-
-def read_image_data(sub_path):
-    image_data = []
-    for dirname, _, files in os.walk(dataset_path + sub_path):
-        for file in files:
-            image_path = dataset_path + sub_path + file
-            image_data.append(cv2.resize(cv2.imread(image_path)[..., ::-1], IMAGE_SIZE) / 255)
-    return image_data
-
 
 image_data['covid'] = read_image_data('/Train/COVID-19/images/')
 image_data['normal'] = read_image_data('/Train/Normal/images/')
@@ -76,8 +63,8 @@ X, Y = sklearn.utils.shuffle(X, Y)
 
 # Creating our neural network
 
-model = load_model('src/model.h5')
-model.load_weights('src/weight.h5')
+model = load_model(MODEL_PATH)
+model.load_weights(WEIGHT_PATH)
 
 ## Uncomment the model if you don't have any previous training data
 
@@ -101,5 +88,5 @@ model.compile(optimizer=Adam(lr=0.0001), loss=SparseCategoricalCrossentropy(from
 history = model.fit(X, Y, epochs=25)
 
 # Saving the model weights and model attributes
-model.save_weights('src/weight.h5')
-model.save('src/model.h5')
+model.save_weights(WEIGHT_PATH)
+model.save(MODEL_PATH)
