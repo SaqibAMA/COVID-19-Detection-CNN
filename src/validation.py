@@ -28,12 +28,12 @@ correct = {
 covid_plot = []
 
 for p in covid_predictions:
-    if p[0] > 0.50000001:
+    if np.argmax(p) == 0:
         correct['covid'] += 1
     covid_plot.append(correct['covid'])
 
 for p in normal_predictions:
-    if p[1] > 0.50000001:
+    if np.argmax(p) == 1:
         correct['normal'] += 1
 
 print("Accuracy on detecting COVID-19: ", (correct['covid'] / len(covid_predictions)) * 100, '%')
