@@ -3,7 +3,6 @@ Created by: Saqib Ali
 train.py -- allows the user to train the exising network to 25 epochs.
 """
 
-from lzma import MODE_FAST
 import numpy as np
 import sklearn.utils
 from keras.models import Sequential, load_model
