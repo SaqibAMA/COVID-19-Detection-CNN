@@ -3,16 +3,18 @@ Created by: Saqib Ali
 train.py -- allows the user to train the exising network to 25 epochs.
 """
 
-# Total Epochs: 175
-# Output files: model.h5, weight.h5
+# Output files: model_batch_norm.h5, weight_batch_norm.h5
+# Observations: The modal quickly converges to the correct solution and the accuracy jumps 60% to 95% in just the first training run.
+
+# Total epochs: 25
 
 import numpy as np
 import sklearn.utils
 from keras.models import Sequential, load_model
-from keras.layers import Dense, Conv2D, MaxPool2D, Flatten, Dropout
+from keras.layers import Dense, Conv2D, MaxPool2D, Flatten, Dropout, BatchNormalization
 from keras.optimizers import Adam
 from keras.losses import SparseCategoricalCrossentropy
-from constants import MODEL_PATH, WEIGHT_PATH
+from constants import BATCH_NORM_MODEL_PATH, BATCH_NORM_WEIGHT_PATH
 from utils import read_image_data
 
 # Reading training data from the dataset
@@ -65,19 +67,24 @@ X, Y = sklearn.utils.shuffle(X, Y)
 
 # Creating our neural network
 
-model = load_model(MODEL_PATH)
-model.load_weights(WEIGHT_PATH)
+model = load_model(BATCH_NORM_MODEL_PATH)
+model.load_weights(BATCH_NORM_WEIGHT_PATH)
 
 ## Uncomment the model if you don't have any previous training data
 
 # model = Sequential([
 #     Conv2D(32, 3, padding="same", activation="relu", input_shape=X.shape[1:]),
 #     MaxPool2D(),
+#     BatchNormalization(),
+#     Dropout(0.2),
 #     Conv2D(32, 3, padding="same", activation="relu"),
 #     MaxPool2D(),
+#     BatchNormalization(),
+#     Dropout(0.2),
 #     Conv2D(64, 3, padding="same", activation="relu"),
 #     MaxPool2D(),
-#     Dropout(0.5),
+#     BatchNormalization(),
+#     Dropout(0.2),
 #     Flatten(),
 #     Dense(128, activation="relu"),
 #     Dense(2, activation="softmax")
@@ -90,5 +97,5 @@ model.compile(optimizer=Adam(lr=0.0001), loss=SparseCategoricalCrossentropy(from
 history = model.fit(X, Y, epochs=25)
 
 # Saving the model weights and model attributes
-model.save_weights(WEIGHT_PATH)
-model.save(MODEL_PATH)
+model.save_weights(BATCH_NORM_WEIGHT_PATH)
+model.save(BATCH_NORM_MODEL_PATH)
