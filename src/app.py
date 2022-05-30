@@ -28,11 +28,14 @@ def upload_image(root):
     prediction = model.predict(img)
     prediction_batch_norm = model_batch_norm.predict(img)
 
+    print("Prediction (Simple Model): ", prediction)
+    print("Prediction (Batch Normalization Model): ", prediction_batch_norm)
+
     prediction_options = ['COVID', 'Normal']
 
     Label(root, text="Filename: " + root.filename.split('/')[-1]).pack(padx=2, pady=2)
-    Label(root, text="Prediction (Simple Model): " + prediction_options[np.argmax(prediction)]).pack(padx=2)
-    Label(root, text="Prediction (Batch Normalized): " + prediction_options[np.argmax(prediction_batch_norm)]).pack(padx=2)
+    Label(root, text="Prediction: " + prediction_options[np.argmax(prediction)]).pack(padx=2)
+    # Label(root, text="Prediction (Batch Normalized): " + prediction_options[np.argmax(prediction_batch_norm)]).pack(padx=2)
     Label(root, text="--").pack(padx=2, pady=2)
 
 
