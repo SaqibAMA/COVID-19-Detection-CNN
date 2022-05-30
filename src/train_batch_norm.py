@@ -6,7 +6,7 @@ train.py -- allows the user to train the exising network to 25 epochs.
 # Output files: model_batch_norm.h5, weight_batch_norm.h5
 # Observations: The modal quickly converges to the correct solution and the accuracy jumps 60% to 95% in just the first training run.
 
-# Total epochs: 25
+# Total epochs: 100
 
 import numpy as np
 import sklearn.utils
@@ -16,7 +16,6 @@ from keras.optimizers import Adam
 from keras.losses import SparseCategoricalCrossentropy
 from constants import BATCH_NORM_MODEL_PATH, BATCH_NORM_WEIGHT_PATH
 from utils import read_image_data
-import matplotlib.pyplot as plt
 
 # Reading training data from the dataset
 
@@ -111,14 +110,3 @@ history = model.fit(X, Y, epochs=25, validation_data=(val_X, val_Y))
 # Saving the model weights and model attributes
 model.save_weights(BATCH_NORM_WEIGHT_PATH)
 model.save(BATCH_NORM_MODEL_PATH)
-
-plt.plot(history.history['loss'])
-plt.plot(history.history['val_loss'])
-plt.title('Model Loss')
-plt.savefig('batch_norm_loss_3.png')
-plt.show()
-
-plt.plot(history.history['accuracy'])
-plt.title('Model Accuracy')
-plt.savefig('batch_norm_accuracy_3.png')
-plt.show()

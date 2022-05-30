@@ -14,8 +14,8 @@ image_data = {
     'normal': []
 }
 
-image_data['covid'] = read_image_data('/Test/COVID-19/images/')
-image_data['normal'] = read_image_data('/Test/Normal/images/')
+image_data['covid'] = read_image_data('/Val/COVID-19/images/')
+image_data['normal'] = read_image_data('/Val/Normal/images/')
 
 covid_predictions = model.predict(np.array(image_data['covid']))
 normal_predictions = model.predict(np.array(image_data['normal']))
