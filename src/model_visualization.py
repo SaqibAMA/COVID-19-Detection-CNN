@@ -1,5 +1,3 @@
-import numpy as np
-import sklearn.utils
 from keras.models import Sequential, load_model
 from keras.layers import Dense, Conv2D, MaxPool2D, Flatten, Dropout, BatchNormalization
 import visualkeras
