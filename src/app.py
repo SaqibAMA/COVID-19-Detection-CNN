@@ -5,6 +5,7 @@ from tkinter import *
 from tkinter import filedialog
 import cv2
 import time
+import numpy as np
 from constants import BATCH_NORM_MODEL_PATH, MODEL_PATH, WEIGHT_PATH, IMAGE_SIZE, BATCH_NORM_WEIGHT_PATH
 
 model = load_model(MODEL_PATH)
@@ -26,13 +27,12 @@ def upload_image(root):
     # predict the image
     prediction = model.predict(img)
     prediction_batch_norm = model_batch_norm.predict(img)
-    is_covid = prediction[0][0]
-    is_covid_batch_norm = prediction_batch_norm[0][0]
 
+    prediction_options = ['COVID', 'Normal']
 
     Label(root, text="Filename: " + root.filename.split('/')[-1]).pack(padx=2, pady=2)
-    Label(root, text="Prediction (Simple Model): " + ("COVID" if is_covid > 0.4 else "Normal"), fg="red" if is_covid > 0.5 else "green").pack(padx=2)
-    Label(root, text="Prediction (Batch Norm): " + ("COVID" if is_covid_batch_norm > 0.4 else "Normal"), fg="red" if is_covid_batch_norm > 0.5 else "green").pack(padx=2)
+    Label(root, text="Prediction (Simple Model): " + prediction_options[np.argmax(prediction)]).pack(padx=2)
+    Label(root, text="Prediction (Batch Normalized): " + prediction_options[np.argmax(prediction_batch_norm)]).pack(padx=2)
     Label(root, text="--").pack(padx=2, pady=2)
 
 
