@@ -16,6 +16,7 @@ from keras.optimizers import Adam
 from keras.losses import SparseCategoricalCrossentropy
 from constants import BATCH_NORM_MODEL_PATH, BATCH_NORM_WEIGHT_PATH
 from utils import read_image_data
+import matplotlib.pyplot as plt
 
 # Reading training data from the dataset
 
@@ -45,11 +46,21 @@ print("Normal Samples after balancing: ", len(image_data['normal']))
 
 print("Data balanced.")
 
-# Reshaping the data
-reshaped_data = {
-    'covid': [],
-    'normal': []
+# Loading validation data
+
+validation_images = {
+    'covid': np.array([]),
+    'normal': np.array([])
 }
+
+validation_images['covid'] = read_image_data('/Val/COVID-19/images/')
+validation_images['normal'] = read_image_data('/Val/Normal/images/')
+
+val_X = np.concatenate((validation_images['covid'], validation_images['normal']))
+val_Y = np.concatenate((
+    np.full(len(validation_images['covid']), 0),
+    np.full(len(validation_images['normal']), 1)
+))
 
 # Generating X and Y
 
@@ -62,6 +73,7 @@ Y = np.concatenate((
 
 # shuffling data
 X, Y = sklearn.utils.shuffle(X, Y)
+val_X, val_Y = sklearn.utils.shuffle(val_X, val_Y)
 
 # Since the data we're reading is completely Test data, we don't have to split it.
 
@@ -93,9 +105,20 @@ model.load_weights(BATCH_NORM_WEIGHT_PATH)
 
 # Compiling the model
 
-model.compile(optimizer=Adam(lr=0.0001), loss=SparseCategoricalCrossentropy(from_logits=True), metrics=['accuracy'])
-history = model.fit(X, Y, epochs=25)
+model.compile(optimizer=Adam(lr=0.000001), loss=SparseCategoricalCrossentropy(from_logits=True), metrics=['accuracy'])
+history = model.fit(X, Y, epochs=25, validation_data=(val_X, val_Y))
 
 # Saving the model weights and model attributes
 model.save_weights(BATCH_NORM_WEIGHT_PATH)
 model.save(BATCH_NORM_MODEL_PATH)
+
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('Model Loss')
+plt.savefig('batch_norm_loss_3.png')
+plt.show()
+
+plt.plot(history.history['accuracy'])
+plt.title('Model Accuracy')
+plt.savefig('batch_norm_accuracy_3.png')
+plt.show()
