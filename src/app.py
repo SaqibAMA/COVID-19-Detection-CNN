@@ -4,12 +4,8 @@ from keras.models import load_model
 from tkinter import *
 from tkinter import filedialog
 import cv2
-import time
 import numpy as np
-from constants import BATCH_NORM_MODEL_PATH, MODEL_PATH, WEIGHT_PATH, IMAGE_SIZE, BATCH_NORM_WEIGHT_PATH
-
-model = load_model(MODEL_PATH)
-model.load_weights(WEIGHT_PATH)
+from constants import BATCH_NORM_MODEL_PATH, IMAGE_SIZE, BATCH_NORM_WEIGHT_PATH
 
 model_batch_norm = load_model(BATCH_NORM_MODEL_PATH)
 model_batch_norm.load_weights(BATCH_NORM_WEIGHT_PATH)
@@ -25,16 +21,14 @@ def upload_image(root):
     img = img.astype('float32')
 
     # predict the image
-    prediction = model.predict(img)
     prediction_batch_norm = model_batch_norm.predict(img)
 
-    print("Prediction (Simple Model): ", prediction)
     print("Prediction (Batch Normalization Model): ", prediction_batch_norm)
 
     prediction_options = ['COVID', 'Normal']
 
     Label(root, text="Filename: " + root.filename.split('/')[-1]).pack(padx=2, pady=2)
-    Label(root, text="Prediction: " + prediction_options[np.argmax(prediction)]).pack(padx=2)
+    Label(root, text="Prediction: " + prediction_options[np.argmax(prediction_batch_norm)]).pack(padx=2)
     # Label(root, text="Prediction (Batch Normalized): " + prediction_options[np.argmax(prediction_batch_norm)]).pack(padx=2)
     Label(root, text="--").pack(padx=2, pady=2)
 
